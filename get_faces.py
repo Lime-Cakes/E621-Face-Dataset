@@ -15,6 +15,14 @@ settings = {
         'MIN_CONFIDENCE' :  0.99
 }
 
+userAgent = {'User-Agent': 'deeplearningdatacrawler'} #Set your own here! This way, they know who to block if you abuse it
+def downloadWithUserAgent(url, destPath):
+    response = requests.get(url, userAgent)
+    if (response.status_code!=200):
+        print("Error downloading. Got code:"+ str(response.status_code)+" with url:"+url)
+    with open(destPath, 'wb') as f:
+        f.write(response.content)
+      
 def get_file(row):
     print("\n\n")
     print("Downloading", row['e621id'], row['file_url'])
@@ -24,7 +32,8 @@ def get_file(row):
         if path.exists(settings['IMAGE_PATH'] + "/" + filename):
             print("Exists", filename)
             return 0
-        wget.download(row['file_url'], settings['IMAGE_PATH'] + "/" + filename)
+        #wget.download(row['file_url'], settings['IMAGE_PATH'] + "/" + filename)
+        downloadWithUserAgent(row['file_url'], settings['IMAGE_PATH'] + "/" + filename)
         return 1
     except Exception as e:
         print("Error getting file", row['file_url'], e)

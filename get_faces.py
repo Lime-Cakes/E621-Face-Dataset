@@ -4,6 +4,7 @@ import os.path
 import cv2
 from os import path
 import argparse
+import requests
 
 settings = {
         'IMAGE_PATH'     :  'out',
